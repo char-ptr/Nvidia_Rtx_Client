@@ -5,7 +5,7 @@ import type { Product, RootObject } from './types/stockAPI.ts';
 export default class RTXClient {
 	public Url: string;
 	public Locale: keyof KnownLocales
-	public WebhookUrl: string;
+	public WebhookUrl?: string;
 	public DevWebhookUrl?: string;
 	public InStock : boolean
 	public KnownProducts : (Product|undefined)[];
@@ -136,6 +136,7 @@ export default class RTXClient {
 	}
 	// webhook which is fired when the product is in stock.
 	private async AlertOnStockWebhook(status: string, Product?: Product,Custom?:string) {
+		if (!this.WebhookUrl) return;
 		let NewCartUrl = CartUrl.replace('%LOCALE%', this.NLocale).replace(
 			'%PRODUCTID%',
 			(

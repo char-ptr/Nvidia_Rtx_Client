@@ -3,7 +3,7 @@ import type {Product } from "./stockAPI.ts";
 export interface clientProps {
     Locale : "en-us" | "en-gb",
     GPU : keyof KnownGPUs
-    WebhookUrl : string
+    WebhookUrl? : string
     Dev? : boolean
     DevWebhookUrl? : string
 	OnInStock? : (Product : Product) => void
