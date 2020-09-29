@@ -2,7 +2,7 @@
 
 export const WebhookUrl = '';
 
-// webhook dev notifation url
+// webhook dev notification url
 
 export const devWHUrl = ""
 
