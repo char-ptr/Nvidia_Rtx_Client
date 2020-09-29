@@ -1,5 +1,6 @@
 # rtx3080_Server
-my [other project](https://github.com/pozm/rtx3080) but supposed to be ran on a server with improvements.
+~~my [other project](https://github.com/pozm/rtx3080) but supposed to be ran on a server with improvements.~~
+this is a better version of that project.
 Some of the improvements include
 - united states support.
 - on in stock & out of stock functions to be ran on said events.
