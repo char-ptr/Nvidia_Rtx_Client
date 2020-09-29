@@ -1,4 +1,4 @@
-import Client from "./index.ts";
+import Client from "./mod.ts";
 let Locale = (Deno.args[0] ?? 'en-gb') as 'en-gb' | 'en-us'; // from argument 1
 let Dev = Deno.args.includes('--dev');
 let Loop = Deno.args.includes('--loop');
