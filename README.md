@@ -10,3 +10,4 @@ Some of the improvements include
 	- i cba adding support for the other cards at the moment and this is the only card i currently care about.
 * usage, it's pretty simple. but you must run with the --unstable parameter.
 	- other parameters can be accessed using --dev and --loop, --dev will send data to a webhook with caught errors, loop will make it continuously check to see if it's on sale.
+	- this project uses [deno](https://deno.land/), NOT node.
