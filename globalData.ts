@@ -1,11 +1,4 @@
-// webhook notification url
-
-export const WebhookUrl = '';
-
-// webhook dev notifation url
-
-export const devWHUrl = ""
-
+export const CartUrl = "https://store.nvidia.com/store?Action=AddItemToRequisition&SiteID=nvidia&Locale=%LOCALE%&productID=%PRODUCTID%&quantity=1"
 
 // nvidia stocks api mapped by locale
 
