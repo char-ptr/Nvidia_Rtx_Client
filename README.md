@@ -29,3 +29,7 @@ let rtxClient = new Client(
 let {Completed, Error} = await rtxClient.Check();
 if (Error) console.log(Error);
 ```
+importing from deno.land
+```
+import Clint from "https://deno.land/x/nvidia_rtx_client@1.0.1/mod.ts"
+```
