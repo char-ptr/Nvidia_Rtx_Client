@@ -7,11 +7,14 @@ export interface clientProps {
     Dev? : boolean
     DevWebhookUrl? : string
 	OnInStock? : (Product : Product) => void
-	OnOutStock? : (Product : Product) => void
+    OnOutStock? : (Product : Product) => void
+    OnFail? : (reason :string) => void;
 }
 export interface checkReturn {
     Completed : boolean;
     Error?: string;
+    Product? : Product
+    IsInStock : boolean;
 }
 
 export interface KnownLocales {

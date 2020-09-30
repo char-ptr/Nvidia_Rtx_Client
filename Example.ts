@@ -8,7 +8,10 @@ let rtxClient = new Client(
         Locale, 
         Dev,
         WebhookUrl : "Your webhook",
-        GPU: "3080"
+        GPU: "3080",
+        OnFail: () => console.log("nooo it failed!"),
+        OnInStock: (prod) => { rtxClient.AlertWebhook(prod) },
+        
     }
 );
 

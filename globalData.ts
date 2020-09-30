@@ -21,7 +21,7 @@ export const localeMap : KnownGPUs = {
         "en-gb":"5438792800"
     },
     "3090": {
-        "en-gb" : "5438793000",
-        "en-us" : ""
+        "en-gb" : "5438793000", // ?? API is down so cant check
+        "en-us" : "" // ?? ^
     }
 }

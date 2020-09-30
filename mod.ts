@@ -17,16 +17,15 @@ export default class RTXClient {
 	private _Attempts: number;
 	private _Errors: number;
 
+	protected OnFail(reeason: string) {
+
+	} 
+
 	protected OnInStock(product: Product) {
-		if (!this.InStock) // if true, that means a notifcation has been sent and we already know that its on sale.
-			this.AlertOnStockWebhook(product.inventoryStatus.status, product);
-			this.InStock = true;
 		console.log(`in stock // ${product.inventoryStatus.status}`)
 
 	}
 	protected OnOutStock(product: Product) {
-		if (this.InStock)
-			this.AlertOnStockWebhook(product.inventoryStatus.status,product,`${product.displayName} is no longer in stock.`)
 		console.log(`out of stock // ${product.inventoryStatus.status}`);
 	}
 
@@ -56,6 +55,7 @@ export default class RTXClient {
 		// method updates
 		this.OnInStock = data.OnInStock ?? this.OnInStock;
 		this.OnOutStock = data.OnOutStock ?? this.OnOutStock;
+		this.OnFail = data.OnFail ?? this.OnFail
 
 		// internal
 		this.NLocale = this.Locale.replace('-', '_');
@@ -135,7 +135,7 @@ export default class RTXClient {
 		);
 	}
 	// webhook which is fired when the product is in stock.
-	private async AlertOnStockWebhook(status: string, Product?: Product,Custom?:string) {
+	public async AlertWebhook(Product?: Product,Custom?:string) {
 		if (!this.WebhookUrl) return;
 		let NewCartUrl = CartUrl.replace('%LOCALE%', this.NLocale).replace(
 			'%PRODUCTID%',
@@ -148,7 +148,7 @@ export default class RTXClient {
 			method: 'POST',
 			headers: [['Content-Type', 'application/json']],
 			body: JSON.stringify({
-				content: Custom ?? `Rtx 3080 may be on sale. // status ⟶ ${status} \\\\\\ @everyone\n URL to cart may be 🠒 ${NewCartUrl} 🠐\nIf not use https://www.nvidia.com/en-gb/shop/geforce/gpu/?page=1&limit=9&locale=en-gb&category=GPU&gpu=RTX%203080`,
+				content: Custom ?? `Rtx 3080 may be on sale. @everyone\n URL to cart may be 🠒 ${NewCartUrl} 🠐\nIf not use https://www.nvidia.com/en-gb/shop/geforce/gpu/?page=1&limit=9&locale=en-gb&category=GPU&gpu=RTX%203080`,
 			}),
 		});
 		f.then(
@@ -164,27 +164,32 @@ export default class RTXClient {
 		);
 	}
 	// when the returned promise is rejected.
-	private DataCatch(rej: string) {
-		console.log(`Got rejection from getData : ${rej}`);
+	private DataCatch(rej: string) : checkReturn {
 		this._Errors++;
+		this.OnFail(rej)
 		if (this.Dev)
+			console.log(`Got rejection from getData : ${rej}`);
 			this.AlertDevWebhook(`[DEV] Got rejection from getData : ${rej} `);
-		return { Completed: true, Error: rej };
+		return { Completed: true, Error: rej, IsInStock: this.InStock };
 	}
 	// when the returned promise is resolved.
-	private DataResolved(value: RootObject) {
+	private DataResolved(value: RootObject) : checkReturn {
 		let defData = value?.products?.product[0];
 		if (!this.KnownProducts.includes(defData))
 			this.KnownProducts.push(defData)
 		let inv = defData.inventoryStatus;
 		if (inv.status != 'PRODUCT_INVENTORY_OUT_OF_STOCK') {
-			console.log('In stock! || ' + inv.status);
+			if (this.Dev)
+				console.log('In stock! || ' + inv.status);
+			this.InStock = true
 			this.OnInStock(value.products.product[0]);
 		} else {
-			console.log(`Out of stock, status : ${inv.status}`);
+			if (this.Dev)
+				console.log(`Out of stock, status : ${inv.status}`);
+			this.InStock = false
 			this.OnOutStock(value.products.product[0]);
 		}
-		return { Completed: true };
+		return { Completed: true, IsInStock: this.InStock, Product : defData };
 	}
 	// check to see if the product is on sale.
 	public Check(): Promise<checkReturn> {
