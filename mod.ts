@@ -43,8 +43,6 @@ export default class RTXClient {
 		this.Sku = localeMap[this.GPU][this.Locale];
 		this.currency = localeCurrency[this.Locale]
 
-		this.Url = this.FormatString(ProductAPI,[{name:"locale",value:this.Locale},{name:"currency",value:this.currency},{name:"sku",value:this.Sku}])
-
 		this.WebhookUrl = data.WebhookUrl;
 		this.DevWebhookUrl = data.DevWebhookUrl;
 
@@ -62,6 +60,10 @@ export default class RTXClient {
 		this.Dev = data.Dev ?? false;
 		this._Attempts = 0;
 		this._Errors = 0;
+
+		// needs to wait for other variables to be defined. 
+		this.Url = this.FormatString(ProductAPI,[{name:"locale",value:this.NLocale},{name:"currency",value:this.currency},{name:"sku",value:this.Sku}])
+
 	}
 	private CheckIfValidLocale = (locale: string) => Object.values(localeMap).some(v=>Object.keys(v).includes(locale))
 	private CheckIfValidGPU = (GPU: string) => Object.keys(localeMap).includes(GPU)
@@ -168,7 +170,7 @@ export default class RTXClient {
 		this._Errors++;
 		this.OnFail(rej)
 		if (this.Dev)
-			console.log(`Got rejection from getData : ${rej}`);
+			console.log(`[dev] Got rejection from getData : ${rej}`);
 			this.AlertDevWebhook(`[DEV] Got rejection from getData : ${rej} `);
 		return { Completed: true, Error: rej, IsInStock: this.InStock };
 	}
@@ -180,12 +182,12 @@ export default class RTXClient {
 		let inv = defData.inventoryStatus;
 		if (inv.status != 'PRODUCT_INVENTORY_OUT_OF_STOCK') {
 			if (this.Dev)
-				console.log('In stock! || ' + inv.status);
+				console.log('[dev] In stock! || ' + inv.status);
 			this.InStock = true
 			this.OnInStock(value.products.product[0]);
 		} else {
 			if (this.Dev)
-				console.log(`Out of stock, status : ${inv.status}`);
+				console.log(`[dev] Out of stock, status : ${inv.status}`);
 			this.InStock = false
 			this.OnOutStock(value.products.product[0]);
 		}
