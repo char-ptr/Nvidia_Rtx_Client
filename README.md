@@ -29,5 +29,5 @@ if (Error) console.log(Error);
 ```
 importing from deno.land
 ```ts
-import client from "https://deno.land/x/nvidia_rtx_client@1.0.1/mod.ts"
+import client from "https://deno.land/x/nvidia_rtx_client@1.0.2/mod.ts"
 ```
