@@ -8,7 +8,7 @@ Some of the improvements include
 - support for multiple cards.
 
 ## Some things you might want to know
-~~This will only give data about the RTX 3080 FE. ~~
+~~This will only give data about the RTX 3080 FE.~~
 	- ~~i cba adding support for the other cards at the moment and this is the only card i currently care about.~~
 * there is now support for rtx 3090 aswell as 3080.
 	- i'll consider a update for rtx 3070.
